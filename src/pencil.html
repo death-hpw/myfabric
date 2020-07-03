@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <user-card></user-card>
+    <template id="userCardTemplate"> </template>
+    <script>
+      class UserCard extends HTMLElement {
+        constructor() {
+          super();
+
+          var templateElem = document.getElementById("userCardTemplate");
+          var content = templateElem.content.cloneNode(true);
+          this.appendChild(content);
+        }
+      }
+      window.customElements.define("user-card", UserCard);
+    </script>
+  </body>
+</html>

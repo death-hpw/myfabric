@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>myfabric</title>
+    <link rel="stylesheet" href="fabric.css" />
+    <style></style>
+  </head>
+  <body>
+    <div class="container">
+      <canvas id="canvas" style="width: 800px; height: 600px;"></canvas>
+    </div>
+    <div id="tool">
+      <my-pencil></my-pencil>
+      <div>ddd</div>
+
+      <div>ddd</div>
+      <div>ddd</div>
+      <div>ddd</div>
+      <div>ddd</div>
+    </div>
+  </body>
+</html>
+
+<script src="/lib/fabric.min.js"></script>
+<script src="/lib/jquery.min.js"></script>
+<script src="/src/icon.js"></script>
+<script src="/src/pencil.js"></script>
+
+<script>
+  const $CANVAS = new fabric.Canvas("canvas", {
+    isDrawingMode: false, // 是否是画笔模式
+    width: 800, // 宽px
+    height: 600 // 高px
+  });
+  // 常量定义
+  const $PENCIL = $("my-pencil")[0];
+
+  // 配置项
+
+  const config = {
+    pencliColor: "green"
+  };
+
+  $PENCIL.config = config;
+  // 画笔
+  // 激活画笔
+  $PENCIL.onClick = (isDraw) => {
+    isDraw === true
+      ? ($CANVAS.isDrawingMode = true)
+      : ($CANVAS.isDrawingMode = false);
+  };
+  // 选择画笔样式
+  $PENCIL.changePencil = (brush) => {
+    if ($CANVAS.isDrawingMode === false) return;
+    console.log("brush", brush);
+    $CANVAS.freeDrawingBrush = new fabric[`${brush}Brush`]($CANVAS);
+  };
+
+  setTimeout(() => {
+    console.log("====");
+    // config
+    // $PENCIL.config = Object.assign({}, config, { pencliColor: "red" });
+  }, 2000);
+  // _canvas.set("display", "block");
+  // _canvas.set("margin", "0 auto");
+
+  // 画笔
+</script>
