@@ -30,7 +30,7 @@ template.innerHTML = `
         left:-5px;
         padding:5px;
         border-radius: 3px;
-        top: 50px; 
+        top: 45px; 
         // border:1px solid red;
         display:none;
          background: #666;
@@ -48,14 +48,17 @@ template.innerHTML = `
         // border-color:#fff;
       }
       .pencil-item {
+        display:block;
         width:20px;
         height:20px;
         // border:1px solid red;
         padding:5px;
         // box-sizing: border-box;
+        border:1px solid red;
       }
       .pencil-item::hover {
-        background: $fff;
+        background-color: #fff !important;
+        cursor:pointer;
       }
 
       #my-pencil::after {
@@ -97,7 +100,8 @@ class MyPencil extends HTMLElement {
       () => {
         this.$activePencil.style.display = "block";
         this.$pencil.style.display = "none";
-        this.onClick(true);
+        // this.onClick(true);
+        this.changeMode("pencil");
         this.$pencilBox.style.display = "flex";
       },
       false
@@ -106,11 +110,13 @@ class MyPencil extends HTMLElement {
     this.$activePencil.addEventListener(
       "click",
       () => {
+        console.log("tjo...", this);
         this.$activePencil.style.display = "none";
         this.$pencil.style.display = "block";
         this.$pencilBox.style.display = "none";
         // 通知父级页面
-        this.onClick(false);
+        // this.onClick(false);
+        this.changeMode("");
       },
       false
     );
@@ -125,6 +131,8 @@ class MyPencil extends HTMLElement {
         this.$pencilBox.style.display = "none";
       }
     });
+
+    // this.onClick = this.onClick.bind(this);
   }
 
   static get observedAttributes() {
@@ -143,11 +151,7 @@ class MyPencil extends HTMLElement {
     return ["config"];
   }
 
-  attributeChangedCallback(name, oldVal, newVal) {
-    console.log("----", name, newVal);
-    // this[name] = newVal;
-    // this.render();
-  }
+  attributeChangedCallback(name, oldVal, newVal) {}
 
   init() {
     this.$activePencil.style.display = "none";
@@ -157,6 +161,27 @@ class MyPencil extends HTMLElement {
 
   render() {
     // this.$myPencil.setAttribute("config", JSON.)
+  }
+
+  changeMode(mode) {
+    console.log("mode", mode);
+    mode === "pencil"
+      ? this.dispatchEvent(
+          new CustomEvent("onClick", {
+            detail: {
+              mode: "pencil"
+            }
+          })
+        )
+      : this.dispatchEvent(
+          new CustomEvent("onClick", {
+            // detail: false,
+            detail: {
+              mode: ""
+            }
+            // mode: ""
+          })
+        );
   }
 }
 window.customElements.define("my-pencil", MyPencil);

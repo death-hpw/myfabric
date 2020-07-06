@@ -13,8 +13,7 @@
     </div>
     <div id="tool">
       <my-pencil></my-pencil>
-      <div>ddd</div>
-
+      <color-picker></color-picker>
       <div>ddd</div>
       <div>ddd</div>
       <div>ddd</div>
@@ -27,6 +26,7 @@
 <script src="/lib/jquery.min.js"></script>
 <script src="/src/icon.js"></script>
 <script src="/src/pencil.js"></script>
+<script src="/src/color.js"></script>
 
 <script>
   const $CANVAS = new fabric.Canvas("canvas", {
@@ -36,21 +36,34 @@
   });
   // 常量定义
   const $PENCIL = $("my-pencil")[0];
+  const $COLORPICKER = $("color-picker")[0];
 
   // 配置项
 
   const config = {
-    pencliColor: "green"
+    pencliColor: "green",
+    mode: "",
+    colorList: ["red", "green", "blue", "yellow"]
   };
+
+  // const setConfig = (utils, prop, value) => {
+  //   utils.forEach((d, i) => {
+  //     d[prop[i]] = value[i];
+  //   });
+  //   // arr.forEach((d) => (d.config = config));
+  // };
 
   $PENCIL.config = config;
   // 画笔
   // 激活画笔
-  $PENCIL.onClick = (isDraw) => {
-    isDraw === true
+  $PENCIL.addEventListener("onClick", ({ detail }) => {
+    const { mode } = detail;
+    config.mode = mode;
+    $PENCIL.config = config;
+    mode === "pencil"
       ? ($CANVAS.isDrawingMode = true)
       : ($CANVAS.isDrawingMode = false);
-  };
+  });
   // 选择画笔样式
   $PENCIL.changePencil = (brush) => {
     if ($CANVAS.isDrawingMode === false) return;
@@ -58,13 +71,15 @@
     $CANVAS.freeDrawingBrush = new fabric[`${brush}Brush`]($CANVAS);
   };
 
-  setTimeout(() => {
-    console.log("====");
-    // config
-    // $PENCIL.config = Object.assign({}, config, { pencliColor: "red" });
-  }, 2000);
-  // _canvas.set("display", "block");
-  // _canvas.set("margin", "0 auto");
+  // color picker
+
+  $COLORPICKER.colorlist = config.colorList;
+
+  $COLORPICKER.changeMode = (mode) => {
+    config.mode = "color";
+    // $PENCIL.config = config;
+    mode && ($CANVAS.isDrawingMode = false);
+  };
 
   // 画笔
 </script>
